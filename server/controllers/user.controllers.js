@@ -1,0 +1,15 @@
+import { generateResponse } from "../config/openRouter.js"
+import extractJson from "../utils/extractJson.js"
+
+export const getCurrentUser=async (req,res)=>{
+    try {
+        if(!req.user){
+            // Return 401 so the frontend hook treats this as "not logged in"
+            return res.status(401).json({message:"not authenticated"})
+        }
+        // Wrap in {user} to match the shape expected by the frontend (data.user)
+        return res.json({user:req.user})
+    } catch (error) {
+        return res.status(500).json({message:`get current user error ${error}`})
+    }
+}
