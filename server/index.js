@@ -35,7 +35,14 @@ app.use("/api/website",websiteRouter)
 app.use("/api/billing",billingRouter)
 
 
-app.listen(port,()=>{
-    console.log("server started")
-    connectDb()
-})
+const PORT = process.env.PORT || 5000;
+
+app.get("/", (req, res) => {
+  res.send("Backend is working 🚀");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  connectDb();
+});
+
