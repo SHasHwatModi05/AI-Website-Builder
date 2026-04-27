@@ -8,18 +8,20 @@ import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
 function LoginModal({ open, onClose }) {
-const dispatch=useDispatch()
-const navigate=useNavigate()
-    const handleGoogleAuth=async ()=>{
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const handleGoogleAuth = async () => {
         try {
             console.log('[Auth] 1. Starting Firebase Google sign-in...')
-            const result=await signInWithPopup(auth,provider)
+            const result = await signInWithPopup(auth, provider)
             console.log('[Auth] 2. Firebase sign-in success. Sending to backend...')
-            const {data}=await axios.post(`${serverUrl}/api/auth/google`,{
-                name:result.user.displayName,
-                email:result.user.email,
-                avatar:result.user.photoURL
-            },{withCredentials:true})
+            const token = await result.user.getIdToken();
+
+            const { data } = await axios.post(
+                `${serverUrl}/api/auth/google`,
+                { token: token },
+                { withCredentials: true }
+            );
             console.log('[Auth] 3. Backend response:', data)
             console.log('[Auth] 4. User data to dispatch:', data.user)
             dispatch(setUserData(data.user))
