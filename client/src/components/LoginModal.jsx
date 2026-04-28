@@ -18,13 +18,13 @@ function LoginModal({ open, onClose }) {
             const token = await result.user.getIdToken();
 
             const { data } = await axios.post(
-                `${serverUrl}/api/auth/google`,
+                `${serverUrl}/auth/google`,
                 { token: token },
                 { withCredentials: true }
             );
             console.log('[Auth] 3. Backend response:', data)
             console.log('[Auth] 4. User data to dispatch:', data.user)
-            dispatch(setUserData(data.user))
+            dispatch(setUserData(data))
             console.log('[Auth] 5. Redux state updated. Closing modal...')
             onClose()
             console.log('[Auth] 6. Navigating to /dashboard...')
