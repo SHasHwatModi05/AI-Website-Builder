@@ -20,7 +20,7 @@ function LoginModal({ open, onClose }) {
             const { data } = await axios.post(
                 `${serverUrl}/auth/google`,
                 { token: token },
-                { withCredentials: true }
+                
             );
             console.log('[Auth] 3. Backend response:', data)
             console.log('[Auth] 4. User data to dispatch:', data.user)
