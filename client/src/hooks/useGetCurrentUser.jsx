@@ -11,10 +11,10 @@ function useGetCurrentUser() {
     useEffect(() => {
         const getCurrentUser = async () => {
             try {
-                const result = await axios.get(`${serverUrl}/api/user/me`, { withCredentials: true })
+                const result = await axios.get(`${serverUrl}/user/me`)
                 // /me returns { user: {...} }
-                if (result && result.data && result.data.user) {
-                    dispatch(setUserData(result.data.user))
+                if (result && result.data) {
+                    dispatch(setUserData(result.data))
                 }
             } catch (error) {
                 // 401 = no token / not logged in — expected, not a real error
