@@ -13,6 +13,9 @@ const userSchema=new mongoose.Schema({
     avatar:{
         type:String
     },
+    firebaseUid:{
+        type:String
+    },
     credits:{
         type:Number,
         default:100,

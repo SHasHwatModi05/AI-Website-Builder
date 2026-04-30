@@ -1,13 +1,17 @@
 import User from "../models/user.model.js"
 import jwt from "jsonwebtoken"
+
 export const googleAuth=async (req,res)=>{
 try {
-    const {name,email,avatar}=req.body
-    if(!email){
+    const {name,email,avatar,idToken}=req.body
+    if(!email || !idToken){
         return res.status(400).json({
-            message:"email is required"
+            message:"email and idToken are required"
         })
     }
+
+    // For now, create/find user by email without Firebase verification
+    // TODO: Add Firebase Admin verification when service account is configured
     let user=await User.findOne({email})
     if(!user){
       user=await User.create({name,email,avatar})

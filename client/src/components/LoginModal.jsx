@@ -14,12 +14,13 @@ function LoginModal({ open, onClose }) {
         try {
             console.log('[Auth] 1. Starting Firebase Google sign-in...')
             const result = await signInWithPopup(auth, provider)
-            console.log('[Auth] 2. Firebase sign-in success. Sending to backend...')
-            const token = await result.user.getIdToken();
+            console.log('[Auth] 2. Firebase sign-in success. Getting ID token...')
+            const idToken = await result.user.getIdToken();
+            console.log('[Auth] 3. ID token obtained. Sending to backend...')
 
             const { data } = await axios.post(
                 `${serverUrl}/auth/google`,
-                { token: token },
+                { name: result.user.displayName, email: result.user.email, avatar: result.user.photoURL, idToken },
                 
             );
             console.log('[Auth] 3. Backend response:', data)

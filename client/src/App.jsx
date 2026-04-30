@@ -9,7 +9,7 @@ import WebsiteEditor from './pages/Editor'
 import LiveSite from './pages/LiveSite'
 import Pricing from './pages/Pricing'
 
-export const serverUrl=import.meta.env.VITE_API_URL
+export const serverUrl="https://api.genwebai.online"
 
 // AppContent lives INSIDE BrowserRouter so hooks that use router context work correctly
 function AppContent() {

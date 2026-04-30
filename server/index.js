@@ -16,18 +16,29 @@ app.post("/api/stripe/webhook",express.raw({type:"application/json"}),stripeWebh
 const port=process.env.PORT || 5000
 app.use(express.json())
 app.use(cookieParser())
+// Enable preflight requests
+app.options("*", cors())
+
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow any localhost port (covers 5173, 5174, 5175, 5176, etc.)
-        if (!origin || /^http:\/\/localhost:\d+$/.test(origin)) {
+        // Allow production domains and localhost for development
+        const allowedOrigins = [
+            "https://genwebai.online",
+            "https://www.genwebai.online",
+            /^http:\/\/localhost:\d+$/  // Allow any localhost port for development
+        ];
+        
+        if (!origin || allowedOrigins.some(allowed => 
+            typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+        )) {
             callback(null, true)
         } else {
             callback(new Error("Not allowed by CORS"))
         }
     },
-    credentials:true,
-    methods:["GET","POST","PUT","DELETE","OPTIONS"],
-    allowedHeaders:["Content-Type","Authorization"]
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Set-Cookie"]
 }))
 app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
