@@ -40,14 +40,16 @@ export const googleAuth = async (req, res) => {
     if (!user) {
       user = await User.create({ name, email, avatar: picture, credits: 100 });
     } else {
-      // Always refresh avatar (Google URLs change over time)
+      // Always refresh avatar from Google (URL changes over time)
       user.avatar = picture;
-      // Initialize credits for pre-existing documents that predate the credits field
-      if (user.credits === undefined || user.credits === null) {
+      // Initialize credits: catches old documents created before credits field existed
+      // OR documents incorrectly initialized to 0
+      if (!user.credits) {
         user.credits = 100;
       }
       await user.save();
     }
+
 
 
     // Sign our own JWT — this is what lives in the httpOnly cookie.
