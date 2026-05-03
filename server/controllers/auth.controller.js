@@ -38,11 +38,17 @@ export const googleAuth = async (req, res) => {
     // Upsert: create user on first login, update avatar on subsequent logins.
     let user = await User.findOne({ email });
     if (!user) {
-      user = await User.create({ name, email, avatar: picture });
+      user = await User.create({ name, email, avatar: picture, credits: 100 });
     } else {
+      // Always refresh avatar (Google URLs change over time)
       user.avatar = picture;
+      // Initialize credits for pre-existing documents that predate the credits field
+      if (user.credits === undefined || user.credits === null) {
+        user.credits = 100;
+      }
       await user.save();
     }
+
 
     // Sign our own JWT — this is what lives in the httpOnly cookie.
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
