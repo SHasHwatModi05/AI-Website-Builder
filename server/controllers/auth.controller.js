@@ -2,24 +2,26 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import admin from "firebase-admin";
 
-// ─── Lazy Firebase Admin initialisation ───────────────────────────────────────
-// WHY: We initialise once. If the app were ever hot-reloaded, calling
-// initializeApp() twice throws. The `getApps()` guard prevents that.
-if (!admin.apps.length) {
-  // The service-account JSON is stored as a single env var (base64-encoded).
-  // On EC2: export FIREBASE_SERVICE_ACCOUNT=$(base64 -w 0 serviceAccountKey.json)
-  const serviceAccount = JSON.parse(
-    Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, "base64").toString("utf8")
-  );
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+// ─── Helper: lazy Firebase Admin initialisation ───────────────────────────────
+// WHY: Initialised on first request, not at module load time.
+// ES modules hoist all imports and run leaf modules (this file) BEFORE
+// dotenv.config() in index.js, so process.env is empty at module level.
+function ensureFirebaseInitialised() {
+  if (!admin.apps.length) {
+    const serviceAccount = JSON.parse(
+      Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, "base64").toString("utf8")
+    );
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  }
 }
 
 // ─── Google Auth ──────────────────────────────────────────────────────────────
 export const googleAuth = async (req, res) => {
   try {
+    ensureFirebaseInitialised();
+
     const { idToken } = req.body;
 
     // WHY: We MUST verify the token server-side. Trusting client-sent name/email
@@ -67,6 +69,7 @@ export const googleAuth = async (req, res) => {
     return res.status(401).json({ message: "Auth failed", error: error.message });
   }
 };
+
 
 // ─── Logout ───────────────────────────────────────────────────────────────────
 export const logOut = async (req, res) => {
