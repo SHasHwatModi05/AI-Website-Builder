@@ -3,8 +3,7 @@ import { AnimatePresence, motion } from "motion/react"
 import LoginModal from '../components/LoginModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { Coins } from "lucide-react"
-import { serverUrl } from '../App'
-import axios from 'axios'
+import axiosInstance from '../axiosInstance'
 import { setUserData } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
 function Home() {
@@ -24,7 +23,7 @@ function Home() {
     const handleLogOut = async () => {
         console.log("logout click")
         try {
-            await axios.get(`${serverUrl}/api/auth/logout`, { withCredentials: true })
+            await axiosInstance.get(`/api/auth/logout`)
             dispatch(setUserData(null))
             setOpenProfile(false)
         } catch (error) {
@@ -38,7 +37,7 @@ function Home() {
 
             try {
 
-                const result = await axios.get(`${serverUrl}/api/website/get-all`, { withCredentials: true })
+                const result = await axiosInstance.get(`/api/website/get-all`)
                 setWebsites(result.data || [])
 
             } catch (error) {

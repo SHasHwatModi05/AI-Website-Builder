@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { motion } from "motion/react"
 import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { serverUrl } from '../App';
+import axiosInstance from '../axiosInstance';
 const plans = [
     {
         key: "free",
@@ -66,7 +65,7 @@ if(planKey=="free"){
 }
 setLoading(planKey)
 try {
-    const result=await axios.post(`${serverUrl}/api/billing`,{planType:planKey},{withCredentials:true})
+    const result=await axiosInstance.post(`/api/billing`,{planType:planKey})
     window.location.href=result.data.sessionUrl
 } catch (error) {
     console.log(error)

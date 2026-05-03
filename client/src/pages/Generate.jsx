@@ -3,8 +3,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from "motion/react"
 import { useState } from 'react'
-import axios from "axios"
-import { serverUrl } from '../App'
+import axiosInstance from '../axiosInstance'
 
 const PHASES = [
     "Analyzing your idea…",
@@ -23,7 +22,7 @@ function Generate() {
     const handleGenerateWebsite = async () => {
         setLoading(true)
         try {
-            const result = await axios.post(`${serverUrl}/api/website/generate`, { prompt }, { withCredentials: true })
+            const result = await axiosInstance.post(`/api/website/generate`, { prompt })
             console.log(result)
             setProgress(100)
             setLoading(false)

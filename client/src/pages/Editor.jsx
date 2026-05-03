@@ -1,8 +1,4 @@
-import axios from 'axios'
-import React from 'react'
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { serverUrl } from '../App'
+import axiosInstance from '../axiosInstance'
 import { useState } from 'react'
 import { ArrowLeft, Code, Code2, MessageCircle, MessageSquare, Monitor, Rocket, Send, X } from 'lucide-react'
 import { useRef } from 'react'
@@ -36,7 +32,7 @@ function WebsiteEditor() {
         setPrompt("")
         setMessages((m) => [...m, { role: "user", content: prompt }])
         try {
-            const result = await axios.post(`${serverUrl}/api/website/update/${id}`, { prompt: text }, { withCredentials: true })
+            const result = await axiosInstance.post(`/api/website/update/${id}`, { prompt: text })
             console.log(result)
             setUpdateLoading(false)
             setMessages((m) => [...m, { role: "ai", content: result.data.message }])
@@ -49,7 +45,7 @@ function WebsiteEditor() {
 
     const handleDeploy = async () => {
             try {
-                const result = await axios.get(`${serverUrl}/api/website/deploy/${website._id}`, { withCredentials: true })
+                const result = await axiosInstance.get(`/api/website/deploy/${website._id}`)
                 window.open(`${result.data.url}`, "_blank")
                
             } catch (error) {
@@ -70,7 +66,7 @@ function WebsiteEditor() {
     useEffect(() => {
         const handleGetWebsite = async () => {
             try {
-                const result = await axios.get(`${serverUrl}/api/website/get-by-id/${id}`, { withCredentials: true })
+                const result = await axiosInstance.get(`/api/website/get-by-id/${id}`)
                 setWebsite(result.data)
                 setCode(result.data.latestCode)
                 setMessages(result.data.conversation)
