@@ -2,8 +2,7 @@ import React from 'react'
 import { AnimatePresence, motion } from "motion/react"
 import { signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../firebase'
-import axios from "axios"
-import { serverUrl } from '../App'
+import axiosInstance from '../axiosInstance' // WHY: withCredentials is baked in — cookie is always sent
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
@@ -18,10 +17,11 @@ function LoginModal({ open, onClose }) {
             const idToken = await result.user.getIdToken();
             console.log('[Auth] 3. ID token obtained. Sending to backend...')
 
-            const { data } = await axios.post(
-                `${serverUrl}/auth/google`,
-                { name: result.user.displayName, email: result.user.email, avatar: result.user.photoURL, idToken },
-                
+            // WHY /api/auth/google: baseURL is already https://api.genwebai.online
+            // withCredentials is set on the instance — the cookie will be stored automatically
+            const { data } = await axiosInstance.post(
+                `/api/auth/google`,
+                { name: result.user.displayName, email: result.user.email, avatar: result.user.photoURL, idToken }
             );
             console.log('[Auth] 3. Backend response:', data)
             console.log('[Auth] 4. User data to dispatch:', data.user)

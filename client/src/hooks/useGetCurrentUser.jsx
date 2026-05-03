@@ -1,6 +1,5 @@
-import axios from 'axios'
+import axiosInstance from '../axiosInstance' // WHY: withCredentials baked in
 import { useEffect, useState } from 'react'
-import { serverUrl } from '../App'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 
@@ -11,7 +10,7 @@ function useGetCurrentUser() {
     useEffect(() => {
         const getCurrentUser = async () => {
             try {
-                const result = await axios.get(`${serverUrl}/user/me`)
+                const result = await axiosInstance.get(`/api/user/me`)
                 // /me returns { user: {...} }
                 if (result && result.data) {
                     dispatch(setUserData(result.data))
