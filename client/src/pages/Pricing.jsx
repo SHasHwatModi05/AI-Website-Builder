@@ -54,25 +54,56 @@ function Pricing() {
     const navigate = useNavigate()
   const {userData}=useSelector(state=>state.user)
   const [loading,setLoading]=useState(null)
-    const handleBuy=async (planKey)=>{
-if(!userData){
-navigate("/")
-return
-}
-if(planKey=="free"){
-    navigate("/dashboard")
-    return
-}
-setLoading(planKey)
-try {
-    const result=await axiosInstance.post(`/api/billing`,{planType:planKey})
-    window.location.href=result.data.sessionUrl
-} catch (error) {
-    console.log(error)
-    setLoading(null)
-}
 
-    }
+    const handleBuy = async (planKey) => {
+      if (!userData) { navigate("/"); return; }
+      if (planKey === "free") { navigate("/dashboard"); return; }
+
+      setLoading(planKey);
+      try {
+        // Step 1: Create Razorpay order on the backend
+        const { data } = await axiosInstance.post(`/api/billing`, { planType: planKey });
+
+        // Step 2: Open Razorpay inline checkout popup
+        const options = {
+          key: data.keyId,
+          amount: data.amount,
+          currency: data.currency,
+          name: "GenWeb.ai",
+          description: `${planKey.charAt(0).toUpperCase() + planKey.slice(1)} Plan`,
+          order_id: data.orderId,
+          handler: async (response) => {
+            // Step 3: Verify payment signature on the backend
+            try {
+              await axiosInstance.post(`/api/billing/verify`, {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                planType: planKey,
+                userId: data.userId,
+              });
+              navigate("/dashboard"); // ✅ Payment successful!
+            } catch {
+              alert("Payment verification failed. Please contact support.");
+            }
+          },
+          prefill: {
+            name: userData?.displayName || "",
+            email: userData?.email || "",
+          },
+          theme: { color: "#6366f1" },
+          modal: {
+            ondismiss: () => setLoading(null),
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (error) {
+        console.log(error);
+        setLoading(null);
+      }
+    };
     return (
         <div className='relative min-h-screen overflow-hidden bg-[#050505] text-white px-6 pt-16 pb-24'>
 

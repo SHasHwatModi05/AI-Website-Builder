@@ -8,18 +8,13 @@ import cors from "cors";
 import userRouter from "./routes/user.routes.js";
 import websiteRouter from "./routes/website.routes.js";
 import billingRouter from "./routes/billing.routes.js";
-import { stripeWebhook } from "./controllers/stripeWebhook.controller.js";
+
 
 const app = express();
 
-// ─── Stripe webhook MUST come before express.json() ───────────────────────────
-// Stripe requires the raw request body to validate the webhook signature.
-// If express.json() runs first, the body is parsed and the signature check fails.
-app.post(
-  "/api/stripe/webhook",
-  express.raw({ type: "application/json" }),
-  stripeWebhook
-);
+// ─── Razorpay: no raw-body webhook needed ────────────────────────────────────
+// Payment verification is handled via HMAC-SHA256 signature check in
+// /api/billing/verify — no separate webhook endpoint required.
 
 // ─── Body parsers ─────────────────────────────────────────────────────────────
 app.use(express.json());
