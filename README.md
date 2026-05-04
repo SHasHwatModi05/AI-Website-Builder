@@ -36,19 +36,19 @@ Built with **Next.js, Node.js, MongoDB, Firebase Authentication, and OpenRouter 
 
 ---
 
-## 🧠User (Browser)
-↓
-AWS Amplify (Frontend - Next.js)
-↓
-API Requests
-↓
-Application Load Balancer (AWS)
-↓
-EC2 (Node.js + Express + PM2 + Nginx)
-↓
-MongoDB + Firebase + OpenRouter API Architecture
+## 🚀 Architecture Flow
 
----
+- **User (Browser)**  
+  ↓  
+- **AWS Amplify (Frontend - Next.js)**  
+  ↓  
+- **API Requests**  
+  ↓  
+- **Application Load Balancer (AWS)**  
+  ↓  
+- **EC2 (Node.js + Express + PM2 + Nginx)**  
+  ↓  
+- **MongoDB + Firebase + OpenRouter API**
 
 
 ---
