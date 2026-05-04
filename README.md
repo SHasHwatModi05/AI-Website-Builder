@@ -95,42 +95,6 @@ Built with **Next.js, Node.js, MongoDB, Firebase Authentication, and OpenRouter 
 
 ---
 
-## ⚙️ Local Setup
-
-### 1️⃣ Clone Repository
-
-```bash
-git clone https://github.com/SHasHwatModi05/AI-Website-Builder.git
-cd AI-Website-Builder
-
-## ⚙️ Setup & Configuration
-
-### 2️⃣ Backend Setup
-
-cd server  
-npm install  
-
-Create a `.env` file:
-
-PORT=5000  
-MONGO_URI=your_mongodb_uri  
-OPENROUTER_API_KEY=your_api_key  
-FIREBASE_PROJECT_ID=your_project_id  
-
-Run backend:
-
-npm run dev  
-
----
-
-### 3️⃣ Frontend Setup
-
-cd client  
-npm install  
-npm run dev  
-
----
-
 ## 🔐 Environment Variables
 
 | Variable | Description |
@@ -152,4 +116,8 @@ npm run dev
    - Checks credits  
    - Deducts credits  
    - Calls OpenRouter API  
-   - Returns generated website  
+   - Returns generated website
+
+---
+
+
