@@ -25,7 +25,8 @@ function LoginModal({ open, onClose }) {
             );
             console.log('[Auth] 3. Backend response:', data)
             console.log('[Auth] 4. User data to dispatch:', data.user)
-            dispatch(setUserData(data))
+            // FIX: dispatch data.user (not data) — backend returns { user: {...} }
+            dispatch(setUserData(data.user))
             console.log('[Auth] 5. Redux state updated. Closing modal...')
             onClose()
             console.log('[Auth] 6. Navigating to /dashboard...')

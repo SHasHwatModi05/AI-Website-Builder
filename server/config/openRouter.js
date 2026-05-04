@@ -3,12 +3,14 @@ const model = "openai/gpt-4o-mini"
 
 export const generateResponse = async (prompt) => {
     const apiKey = process.env.OPENROUTER_API_KEY
-    console.log("OPENROUTER_API_KEY loaded:", apiKey ? "✅ API Key found" : "❌ API Key missing");
+    console.log("OPENROUTER_API_KEY loaded:", apiKey ? "✅ found" : "❌ MISSING — set in .env");
     const res = await fetch(openRouterUrl, {
         method: 'POST',
         headers: {
-            Authorization: `Bearer ${apiKey}`,
+            'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://genwebai.online',   // required by OpenRouter
+            'X-Title': 'GenWeb.ai',                       // shown in your dashboard
         },
         body: JSON.stringify({
             model: model,

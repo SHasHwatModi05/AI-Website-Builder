@@ -16,8 +16,10 @@ function AppContent() {
   const isLoading = useGetCurrentUser()
   const {userData}=useSelector(state=>state.user)
 
-  // Wait for the /me check to finish before rendering protected routes
-  if (isLoading) return null
+  // Wait for /me check only when there is no cached user from localStorage.
+  // If localStorage had a user, show the UI immediately — useGetCurrentUser
+  // will validate the session in the background and clear state on 401.
+  if (isLoading && !userData) return null
 
   return (
    <Routes>
