@@ -98,7 +98,7 @@ function Home() {
                                                     <p className='text-xs text-zinc-500 truncate'>{userData.email}</p>
                                                 </div>
 
-                                                <button className='md:hidden w-full px-4 py-3 flex items-center gap-2 text-sm border-b border-white/10 hover:bg-white/5'>
+                                                <button className='md:hidden w-full px-4 py-3 flex items-center gap-2 text-sm border-b border-white/10 hover:bg-white/5' onClick={() => { navigate("/pricing"); setOpenProfile(false); }}>
                                                     <Coins size={14} className='text-yellow-400' />
                                                     <span className='text-zinc-300'>Credits</span>
                                                     <span>{userData.credits}</span>
