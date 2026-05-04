@@ -46,20 +46,19 @@ Built with **Next.js, Node.js, MongoDB, Firebase Authentication, OpenRouter AI, 
   * Dynamic updates after generation
 
 ---
-
 ## 🚀 Architecture Flow
 
-* **User (Browser)**
-  ↓
-* **AWS Amplify (Frontend - Next.js)**
-  ↓
-* **API Requests**
-  ↓
-* **Application Load Balancer (AWS)**
-  ↓
-* **EC2 (Node.js + Express + PM2 + Nginx)**
-  ↓
-* **MongoDB + Firebase + OpenRouter API + Razorpay**
+**User (Browser)** <br>
+↓ <br>
+**AWS Amplify (Frontend - Next.js)** <br>
+↓ <br>
+**API Requests** <br>
+↓ <br>
+**Application Load Balancer (AWS)** <br>
+↓ <br>
+**EC2 (Node.js + Express + PM2 + Nginx)** <br>
+↓ <br>
+**MongoDB + Firebase + OpenRouter API + Razorpay**
 
 ---
 
@@ -113,7 +112,7 @@ Built with **Next.js, Node.js, MongoDB, Firebase Authentication, OpenRouter AI, 
 
 | Variable            | Description               |
 | ------------------- | ------------------------- |
-| MONGO_URI           | MongoDB connection string |
+| MONGO_URL           | MongoDB connection string |
 | OPENROUTER_API_KEY  | AI API key                |
 | FIREBASE_PROJECT_ID | Firebase project ID       |
 | RAZORPAY_KEY_ID     | Razorpay public key       |
