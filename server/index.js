@@ -30,14 +30,21 @@ const corsOptions = {
     if (!origin) return callback(null, true);
 
     const allowedOrigins = [
-      "https://genwebai.online",       // production (apex)
-      "https://www.genwebai.online",   // production (www)
+      "https://genwebai.online",         // production (apex)
+      "https://www.genwebai.online",     // production (www)
+      "http://13.201.27.162",            // EC2 public IP (port 80)
+      "http://13.201.27.162:80",         // EC2 public IP (explicit port 80)
+      "http://13.201.27.162:3000",       // EC2 frontend dev port
+      "http://13.201.27.162:5173",       // EC2 vite dev port
     ];
 
     // Also permit any localhost port so local dev works without changing this file.
     const isLocalhost = /^http:\/\/localhost:\d+$/.test(origin);
 
-    if (allowedOrigins.includes(origin) || isLocalhost) {
+    // Also allow the EC2 IP on any port dynamically
+    const isEC2 = /^http:\/\/13\.201\.27\.162(:\d+)?$/.test(origin);
+
+    if (allowedOrigins.includes(origin) || isLocalhost || isEC2) {
       callback(null, true);
     } else {
       callback(new Error(`CORS: origin '${origin}' not allowed`));
