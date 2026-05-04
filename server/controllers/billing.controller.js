@@ -1,5 +1,5 @@
 import { PLANS } from "../config/plan.js";
-import { getRazorpay } from "../config/razorpay.js";
+import Razorpay from "razorpay";
 
 export const billing = async (req, res) => {
   try {
@@ -11,10 +11,14 @@ export const billing = async (req, res) => {
       return res.status(400).json({ message: "Invalid paid plan" });
     }
 
-    const razorpay = getRazorpay(); // ← initialized here, after dotenv is loaded
+    // Initialize inside the function — env vars are guaranteed loaded by now
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
 
     const order = await razorpay.orders.create({
-      amount: plan.price * 100, // Razorpay uses paise (same as Stripe cents)
+      amount: plan.price * 100,
       currency: "INR",
       receipt: `receipt_${userId}_${Date.now()}`,
       notes: {
@@ -36,4 +40,4 @@ export const billing = async (req, res) => {
     console.log(error);
     return res.status(500).json({ message: `Billing error: ${error}` });
   }
-};
+};
