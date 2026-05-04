@@ -12,8 +12,8 @@ function useGetCurrentUser() {
             try {
                 const result = await axiosInstance.get(`/api/user/me`)
                 // /me returns { user: {...} }
-                if (result && result.data) {
-                    dispatch(setUserData(result.data))
+                if (result && result.data && result.data.user) {
+                    dispatch(setUserData(result.data.user))
                 }
             } catch (error) {
                 // 401 = no token / not logged in — expected, not a real error
