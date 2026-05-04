@@ -1,5 +1,5 @@
 import { PLANS } from "../config/plan.js";
-import razorpay from "../config/razorpay.js";
+import { getRazorpay } from "../config/razorpay.js";
 
 export const billing = async (req, res) => {
   try {
@@ -10,6 +10,8 @@ export const billing = async (req, res) => {
     if (!plan || plan.price === 0) {
       return res.status(400).json({ message: "Invalid paid plan" });
     }
+
+    const razorpay = getRazorpay(); // ← initialized here, after dotenv is loaded
 
     const order = await razorpay.orders.create({
       amount: plan.price * 100, // Razorpay uses paise (same as Stripe cents)
