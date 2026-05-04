@@ -1,7 +1,7 @@
 import axiosInstance from '../axiosInstance'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ArrowLeft, Code, Code2, MessageCircle, MessageSquare, Monitor, Rocket, Send, X } from 'lucide-react'
-import { useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 
 import Editor from '@monaco-editor/react';
